@@ -29,14 +29,17 @@ def get_project_info(project: Project):
 
 def send_project(bot: telebot.TeleBot, project: Project):
     for user in BotUser.users.all():
-        if user.filter.is_valid_project(project):
-            project_info = get_project_info(project)
-            with open(LOGO_IMAGE_PATH, 'rb') as photo:
-                bot.send_photo(
-                    chat_id=user.chat_id,
-                    photo=photo,
-                    caption=project_info,
-                )
+        if user.filter.is_valid_project(project) and user.filter.active:
+            try:
+                project_info = get_project_info(project)
+                with open(LOGO_IMAGE_PATH, 'rb') as photo:
+                    bot.send_photo(
+                        chat_id=user.chat_id,
+                        photo=photo,
+                        caption=project_info,
+                    )
+            except Exception:
+                pass
 
 
 def main():
