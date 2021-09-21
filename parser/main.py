@@ -18,7 +18,7 @@ def get_last_update_datetime():
     tz = pytz.timezone('Asia/Tashkent')
     if not project:
         dt = datetime.datetime.now()
-        dt -= datetime.timedelta(minutes=5)
+        dt -= datetime.timedelta(minutes=50)
         return tz.localize(dt)
 
     return tz.normalize(project.published.replace(tzinfo=utc))
@@ -36,10 +36,11 @@ def migrate_to_db(new_projects: list[Project]):
         for parent, child in project.chapters:
             chapter_db, success = ChapterDB.chapters.get_or_create(name=child)
             if success:
-                parent = ChapterDB.chapters.create(name=parent)
+                parent, _ = ChapterDB.chapters.get_or_create(name=parent)
                 chapter_db.parent = parent
                 chapter_db.save()
 
+            project_db.chapters.add(chapter_db.parent)
             project_db.chapters.add(chapter_db)
 
 

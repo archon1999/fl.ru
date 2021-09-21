@@ -27,6 +27,9 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -88,16 +91,24 @@ class Project(models.Model):
 
 
 class BotUser(models.Model):
+    class State(models.IntegerChoices):
+        EDIT_BUDGET_MIN = 1
+        EDIT_BUDGET_MAX = 2
+        EDIT_KEYWORDS = 3
+
     users = models.Manager()
     chat_id = models.IntegerField(unique=True)
-    full_name = models.CharField(max_length=255)
-    active = models.BooleanField(default=True)
+    state = models.IntegerField(
+        choices=State.choices,
+        null=True,
+        blank=True,
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.full_name
+        return str(self.chat_id)
 
 
 class BotUserFilter(models.Model):
@@ -106,10 +117,12 @@ class BotUserFilter(models.Model):
         on_delete=models.CASCADE,
         related_name='filter'
     )
+    active = models.BooleanField(default=True)
     budget_min = models.IntegerField(null=True, blank=True)
     budget_max = models.IntegerField(null=True, blank=True)
-    only_safe_deal = models.BooleanField(default=False)
-    only_without_executor = models.BooleanField(default=True)
+    safe_deal = models.BooleanField(default=False)
+    keywords = models.CharField(max_length=30)
+    without_executor = models.BooleanField(default=True)
     chapters = models.ManyToManyField(Chapter)
 
     def is_valid_project(self, project: Project):
@@ -119,10 +132,10 @@ class BotUserFilter(models.Model):
             if not(budget_min <= project.budget <= budget_max):
                 return False
 
-        if self.only_safe_deal and not project.safe_deal:
+        if self.safe_deal and not project.safe_deal:
             return False
 
-        if self.only_without_executor and not project.without_executor:
+        if self.without_executor and not project.without_executor:
             return False
 
         user_filter_chapters = self.chapters.all()

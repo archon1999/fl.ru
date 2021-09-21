@@ -56,7 +56,7 @@ def main():
                 send_project(bot, project)
             task.done = True
         except Exception:
-            print(traceback.format_exc())
+            print(traceback.format_exc())   
         finally:
             task.save()
             time.sleep(5)

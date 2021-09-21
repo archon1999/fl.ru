@@ -6,13 +6,13 @@ from backend.models import (BotUser, BotUserFilter, Chapter, Project,
 
 @admin.register(BotUser)
 class BotUserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'chat_id', 'full_name', 'created']
+    list_display = ['id', 'chat_id', 'created']
 
 
 @admin.register(BotUserFilter)
 class BotUserFilterAdmin(admin.ModelAdmin):
-    list_display = ['user', 'budget_min', 'budget_max', 'only_safe_deal',
-                    'only_without_executor']
+    list_display = ['user', 'budget_min', 'budget_max', 'safe_deal',
+                    'without_executor']
 
 
 @admin.register(Project)
@@ -27,7 +27,7 @@ class ChapterAdmin(admin.ModelAdmin):
 
 @admin.register(TaskManager)
 class TaskManagerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type', 'project']
+    list_display = ['id', 'type', 'project', 'done']
 
 
 @admin.register(Template)

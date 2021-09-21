@@ -36,6 +36,22 @@ class CallTypes():
     Back = CallTypeMeta('Back')
     Language = CallTypeMeta('Language', 'lang')
 
+    ProjectsPage = CallTypeMeta('ProjectsPage', 'page__int')
+    Settings = CallTypeMeta('Settings')
+
+    FilterActive = CallTypeMeta('FilterActive')
+    FilterSafeDeal = CallTypeMeta('FilterSafeDeal')
+    FilterBudgetMin = CallTypeMeta('FilterBudgetMin')
+    FilterBudgetMax = CallTypeMeta('FilterBudgetMax')
+    FilterKeywords = CallTypeMeta('FilterKeywords')
+
+    FilterChapters = CallTypeMeta('FilterChapters')
+    FilterChapter = CallTypeMeta('FilterChapter', 'chapter_id__int')
+    FilterChapterSelectAll = CallTypeMeta('FilterChapterSelectAll',
+                                          'chapter_id__int')
+    FilterChapterReset = CallTypeMeta('FilterChapterReset',
+                                      'chapter_id__int')
+
     Nothing = CallTypeMeta('Nothing')
 
     @classmethod
